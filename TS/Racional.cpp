@@ -20,9 +20,10 @@ int mcm(int a, int b){
 }
 
 class Racional{
+    private:
+        int num, den;
         
     public:
-        int num, den;
         Racional(){}
         Racional(int a, int b){
             num = a;
