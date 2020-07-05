@@ -1,4 +1,4 @@
-typedef  int TipoElemento
+typedef  int TipoElemento;
 struct Componente{
     TipoElemento elemento;
     struct Componente * sig;
