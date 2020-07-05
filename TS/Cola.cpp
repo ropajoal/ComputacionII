@@ -1,3 +1,6 @@
+#define _GLIBCXX_USE_CXX11_ABI 0
+#include <iostream>
+
 typedef  int TipoElemento;
 struct Componente{
     TipoElemento elemento;
