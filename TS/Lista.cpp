@@ -6,7 +6,7 @@ using namespace std;
 
 struct Contacto{
     string nombre, telefono, email;
-}
+};
 
 class ConNodo{
     protected:
@@ -37,6 +37,10 @@ class ConNodo{
 
 bool operator < (string a, string b){
     return strcmp(a,b ) < 0;
+}
+
+bool operator == (string& nombre){
+    return strcmp(this, nombre) == 0
 }
 
 class Agenda{
@@ -70,4 +74,27 @@ class Agenda{
                 }
             }
         }
-}
+        void eliminarContacto(string nombre){
+            if(primero->obtenerContacto.nombre == nombre) primero = primero->enlaceNodo();
+            else{
+                ConNodo* actual;
+                actual = primero;
+                while (actual->enlaceNodo() != NULL){
+                    if(nombre == actual->enlaceNodo()->obtenerContacto().nombre){
+                        actual->ponerEnlace(actual->enlaceNodo()->enlaceNodo())
+                    }
+                    actual = actual->enlaceNodo();
+                }
+            }
+        }
+        void mostrarContactos(){
+            ConNodo* actual;
+            Contacto contacto;
+            actual = primero;            
+            while(actual != NULL){
+                contacto = actual->obtenerContacto();
+                cout << contacto.nombre << "\t" << contacto.telefono << "\t" << contacto.email << endl;
+                actual = actual->enlaceNodo();
+            }
+        }
+};
