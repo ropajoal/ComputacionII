@@ -4,6 +4,8 @@
 using namespace std;
 
 typedef  int TipoElemento;
+
+//Estructura de datos a utilizar
 struct Componente{
     TipoElemento elemento;
     struct Componente * sig;
@@ -13,6 +15,8 @@ struct Cola{
     Puntero principio, final;
 };
 
+
+//Métodos con los que se implementa la estructura de datos
 Cola crearCola(){
     Cola cola;
     cola.principio = NULL;
