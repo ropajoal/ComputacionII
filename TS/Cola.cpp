@@ -1,6 +1,8 @@
 #define _GLIBCXX_USE_CXX11_ABI 0
 #include <iostream>
 
+using namespace std;
+
 typedef  int TipoElemento;
 struct Componente{
     TipoElemento elemento;
@@ -26,11 +28,11 @@ TipoElemento Primero(Cola cola){
     if(!esVacio(cola)){
         return cola.principio->elemento;
     }
-    return NULL;
+    throw "Cola Vacia";
 }
 
 void Encolar(Cola& cola, TipoElemento dato){
-    Puntero puntero;
+    Puntero puntero = new Componente;
     puntero->elemento = dato;
     puntero->sig = NULL;
     if(esVacio(cola)){
@@ -39,20 +41,37 @@ void Encolar(Cola& cola, TipoElemento dato){
     }
     else{
         cola.final->sig = puntero;
+        cola.final = puntero;
     }
 }
 
 void sacarCola(Cola& cola, TipoElemento dato){
-    if(esVacio(cola))return NULL;
-    if(cola.principio->elemento == dato) cola.principio = cola.principio->sig;
-    else{
-        Puntero actual;
-        actual = cola.principio;
-        while(actual->sig!=NULL){
-            if(actual->sig->elemento == dato) actual->sig = actual->sig->sig;
-            else{
-                actual = actual->sig;
-            }            
+    if(!esVacio(cola)){
+        if(cola.principio->elemento == dato) cola.principio = cola.principio->sig;
+        else{
+            Puntero actual;
+            actual = cola.principio;
+            while(actual->sig!=NULL){
+                if(actual->sig->elemento == dato) actual->sig = actual->sig->sig;
+                else{
+                    actual = actual->sig;
+                }            
+            }
         }
     }
+    else{
+        throw "Cola vacia";
+    }
+}
+
+
+
+int main(){
+    Cola cola = crearCola();
+    Encolar(cola,1);
+    Encolar(cola,2);
+    Encolar(cola,3);
+    Encolar(cola,4);
+    sacarCola(cola,2);
+    sacarCola(cola,3);
 }
