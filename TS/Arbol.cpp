@@ -61,8 +61,6 @@ class ArbolBinario{
         NodoArbol raizArbol(){
             if(raiz)
                 return *raiz;
-            else
-                throw " arbol vacio";
         }
         bool esVacio(){
             return raiz == NULL;
@@ -70,14 +68,10 @@ class ArbolBinario{
         NodoArbol* hijoIzdo(){
             if(raiz)
                 return raiz->subArbolIzdo();
-            else
-                throw " arbol vacio";
         }
         NodoArbol* hijoDcho(){
             if(raiz)
                 return raiz->subArbolDcho();
-            else
-                throw " arbol vacio";
         }
         NodoArbol* nuevoArbol(NodoArbol *ramaIzdo, TipoElemento dato, NodoArbol *ramaDcho){
             return new NodoArbol(ramaIzdo,dato, ramaDcho);
@@ -98,14 +92,11 @@ class ArbolBinario{
                 dr = insertar(raizSub->subArbolDcho(), dato);
                 raizSub->ramaDcho(dr);
             }
-            else
-                throw "Nodo Duplicado";
             return raizSub;
         }
 };
 
 int numeroAleatorio(int limite){
-    srand(time(NULL));
     return rand() % limite;
 }
 
@@ -118,11 +109,10 @@ int altura(NodoArbol *raiz){
 }
 
 ArbolBinario llenarArbolAltura(int alt){
-    int numero;
+    srand(time(NULL));
     ArbolBinario arbol;
     while(altura(arbol.Oraiz()) < alt){
-        numero = numeroAleatorio(100);
-        arbol.insertar(numero);
+        arbol.insertar(numeroAleatorio(100));
     }
     return arbol;
 }
@@ -135,5 +125,8 @@ int contarElementosPorNivel(NodoArbol *raiz, int nivel){
 
 int main(){
     ArbolBinario arbol = llenarArbolAltura(6);
+    for (int i=0; i<=6; i++){
+        cout << "Elementos Nivel " << i << " = "<<contarElementosPorNivel(arbol.Oraiz(),i) << endl;
+    }
     cout << arbol.Oraiz()->valorNodo() << altura(arbol.Oraiz());
 }
