@@ -1,9 +1,10 @@
 #define _GLIBCXX_USE_CXX11_ABI 0
 #include <iostream>
-#include <stdlib.h>
 #include <time.h>
 
-typedef int TipoElemento
+using namespace std;
+
+typedef int TipoElemento;
 
 class NodoArbol{
     protected:
@@ -79,7 +80,7 @@ class ArbolBinario{
                 throw " arbol vacio";
         }
         NodoArbol* nuevoArbol(NodoArbol *ramaIzdo, TipoElemento dato, NodoArbol *ramaDcho){
-            return new NodoArbol(ramaIzdo,dato ramaDcho);
+            return new NodoArbol(ramaIzdo,dato, ramaDcho);
         }
         void insertar (TipoElemento valor){
             raiz = insertar(raiz, valor);
@@ -94,7 +95,7 @@ class ArbolBinario{
             }
             else if (dato > raizSub->valorNodo()){
                 NodoArbol *dr;
-                dr = insertar(raizsub->subArbolDcho(), dato);
+                dr = insertar(raizSub->subArbolDcho(), dato);
                 raizSub->ramaDcho(dr);
             }
             else
@@ -105,18 +106,18 @@ class ArbolBinario{
 
 int numeroAleatorio(int limite){
     srand(time(NULL));
-    return rand() % limite + 1;
+    return rand() % limite;
 }
 
 int altura(NodoArbol *raiz){
-    if(raiz == NULL) return 0;
+    if(raiz == NULL) return -1;
     int alturaIz = altura(raiz->subArbolIzdo());
-    int alturaDr = altura(raiz->subArbolDr());
+    int alturaDr = altura(raiz->subArbolDcho());
     if(alturaIz > alturaDr) return alturaIz + 1;
     else return alturaDr + 1;
 }
 
-ArbolBinario crearArbolAltura(int alt){
+ArbolBinario llenarArbolAltura(int alt){
     int numero;
     ArbolBinario arbol;
     while(altura(arbol.Oraiz()) < alt){
@@ -124,4 +125,15 @@ ArbolBinario crearArbolAltura(int alt){
         arbol.insertar(numero);
     }
     return arbol;
+}
+
+int contarElementosPorNivel(NodoArbol *raiz, int nivel){
+    if(raiz == NULL) return 0;
+    if(nivel == 0) return 1;
+    return contarElementosPorNivel(raiz->subArbolIzdo(),nivel-1) + contarElementosPorNivel(raiz->subArbolDcho(),nivel-1);
+}
+
+int main(){
+    ArbolBinario arbol = llenarArbolAltura(6);
+    cout << arbol.Oraiz()->valorNodo() << altura(arbol.Oraiz());
 }
