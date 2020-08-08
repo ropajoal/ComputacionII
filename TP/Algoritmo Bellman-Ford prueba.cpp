@@ -1,6 +1,5 @@
-//#define _GLIBCXX_USE_CXX11_ABI 0
 #include <iostream>
-#define INFINITY 0x3f3f3f3f
+#define INFINITO 0x3f3f3f3f
 using namespace std;
 
 class Vertice{
@@ -8,10 +7,7 @@ class Vertice{
 		string nombre;
 		int numVertice;
 	public:
-		Vertice(){
-			nombre = "none";
-			numVertice = -1;
-		}
+		Vertice(){}
 		Vertice(string nom){
 			nombre = nom;
 			numVertice = -1;
@@ -31,9 +27,6 @@ class Vertice{
 		}
 		void establecerNumVertice(int num){
 			numVertice = num;
-		}
-		bool igual(Vertice vertice){
-			return nombre == vertice.nombre;
 		}
 };
 
@@ -56,7 +49,7 @@ class GrafoMatriz{
 			for (int i=0;i<max;i++){
 				matAd[i] = new int [max];
 				for(int j=0;j<max;j++){
-					matAd[i][j] = INFINITY;
+					matAd[i][j] = INFINITO;
 				}
 			}
 		}
@@ -75,8 +68,7 @@ class GrafoMatriz{
 			}
 			return (i < numVerts) ? i : -1;
 		}
-		void nuevoVertice(string nombre){
-			
+		void nuevoVertice(string nombre){			
 			if(numVertice(nombre) < 0){
 				Vertice v = Vertice(nombre, numVerts);
 				verts[numVerts++] = v;
@@ -93,17 +85,7 @@ class GrafoMatriz{
 				//throw "Vertice no existe";
 			matAd[v1][v2] = matAd[v2][v1] = valor;
 		}
-		bool adyacente(string nomVert1, string nomVert2){
-			int v1, v2;
-			v1 = numVertice(nomVert1);
-			v2 = numVertice(nomVert2);
-			return adyacente(v1,v2);
-		}
-		bool adyacente(int v1, int v2){
-			//if (v1 < 0 || v2 < 0 || v1 >= numVerts || v2 >= numVerts)
-				//throw "Vertice no existe";
-			return (bool)matAd[v1][v2];
-		}
+		
 		int obtenerValor(string nomVert1, string nomVert2){
 			int v1, v2;
 			v1 = numVertice(nomVert1);
@@ -135,16 +117,7 @@ class GrafoMatriz{
 			//else 
 			return verts[v];
 		}
-		void establecerVertice(string nomVert, Vertice v){
-			establecerVertice(numVertice(nomVert),v);
-		}
-		void establecerVertice(int nv, Vertice v){
-			//if( nv < 0 || nv >= numVerts) throw "Vertice no existe";
-			//else 
-			verts[nv] = v;
-		}
 };
-
 
 
 class Pila{
@@ -194,7 +167,7 @@ void bellmanFord(GrafoMatriz grafo, int vertIni){
 	int dist[numVertices];
 	int prev[numVertices];
 	for(int i=0; i<numVertices; i++){
-		dist[i]=INFINITY;
+		dist[i]=INFINITO;
 		prev[i]=-1;
 	}
 	dist[vertIni] = 0;
@@ -210,7 +183,7 @@ void bellmanFord(GrafoMatriz grafo, int vertIni){
 		for (int i = 0; i < numVertices; i++)
 			for (int j = 0; j < numVertices; j++)
 				if(dist[i] + grafo.obtenerValor(i,j) < dist[j]){
-					dist[j] = -INFINITY;
+					dist[j] = -INFINITO;
 					prev[j] = -2;
 				}
 	
@@ -219,7 +192,7 @@ void bellmanFord(GrafoMatriz grafo, int vertIni){
 	for (int i=0; i<numVertices; i++){
 		cout << "El camino mas corto entre el vertice "<<grafo.obtenerVertice(vertIni).obtenerNomVertice()<< " y el vertice " <<grafo.obtenerVertice(i).obtenerNomVertice()<<" es: ";
 		en = i;
-		for (; prev[en] > 0; en = prev[en]){
+		for (; prev[en] >= 0; en = prev[en]){
 			camino.insertar(en);
 			
 		}
@@ -265,5 +238,5 @@ int main(){
 	grafo.nuevoArco("D","F",3);
 	grafo.nuevoArco("C","F",8);
 	grafo.nuevoArco("F","G",4);
-	bellmanFord(grafo,"F");
+	bellmanFord(grafo,"S");
 }
