@@ -1,4 +1,4 @@
-#define _GLIBCXX_USE_CXX11_ABI 0
+//#define _GLIBCXX_USE_CXX11_ABI 0
 #include <iostream>
 #define INFINITY 0x3f3f3f3f
 using namespace std;
@@ -58,14 +58,6 @@ class GrafoMatriz{
 				for(int j=0;j<max;j++){
 					matAd[i][j] = INFINITY;
 				}
-			}
-		}
-		void mostrarMatriz(){
-			for(int i=0; i<maxVerts; i++){
-				for(int j=0; j<maxVerts; j++){
-					cout << matAd[i][j] << " ";
-				}
-				cout <<endl;
 			}
 		}
 		int obtenerNumeroDeVertices(){
@@ -155,7 +147,7 @@ class GrafoMatriz{
 
 
 
-class Cola{
+class Pila{
 	protected:
 		class Nodo{
 			protected:
@@ -171,32 +163,28 @@ class Cola{
 				void establecerDato(int d){dato = d;}
 				void establecerEnlace(Nodo* link){enlace = link;}
 		};
-		Nodo* frente;
-		Nodo* final;
+		Nodo* cima;
 		int length;
 	public:
-		Cola(){frente = final = NULL; length = 0;}
+		Pila(){cima = NULL; length = 0;}
 		void insertar(int dato){
-			Nodo* nuevo = new Nodo(dato);
-			if(colaVacia()){
-				frente = nuevo;
-			}
-			else{
-				final->establecerEnlace(nuevo);
-			}
-			final = nuevo;
+			Nodo* nuevo;
+			nuevo = new Nodo(dato);
+			nuevo->establecerEnlace(cima);
+			cima = nuevo;
 			length++;
 		}
 		int sacar(){
-			int ext = frente->obtenerDato();
-			Nodo* a = frente;
-			frente = frente ->obtenerEnlace();
+			int ext = cima->obtenerDato();
+			Nodo* a = cima;
+			cima = cima->obtenerEnlace();				
 			delete a;
 			length--;
 			return ext;
 		}
+		int tope(){return cima->obtenerDato();}
 		bool colaVacia(){
-			return frente == NULL && final == NULL;
+			return cima == NULL;
 		}
 		int obtenerCantidadElementos(){return length;}
 };
@@ -218,10 +206,6 @@ void bellmanFord(GrafoMatriz grafo, int vertIni){
 					prev[j] = i;
 				}
 				
-	for (int i=0; i < numVertices;i++){cout<< i << ":" <<prev[i]<<" ";}
-	cout <<endl;
-				
-		
 	for (int k = 0; k < numVertices - 1; k++)
 		for (int i = 0; i < numVertices; i++)
 			for (int j = 0; j < numVertices; j++)
@@ -230,26 +214,25 @@ void bellmanFord(GrafoMatriz grafo, int vertIni){
 					prev[j] = -2;
 				}
 	
-	for (int i = 0; i < numVertices; i++)
-		cout << "La menor distancia entre el vertice "<<grafo.obtenerVertice(vertIni).obtenerNomVertice() << " y el vertice "<<grafo.obtenerVertice(i).obtenerNomVertice() <<" es: " << dist[i]<<endl;
-	
-	Cola camino;
+	Pila camino;
+	int en;
 	for (int i=0; i<numVertices; i++){
 		cout << "El camino mas corto entre el vertice "<<grafo.obtenerVertice(vertIni).obtenerNomVertice()<< " y el vertice " <<grafo.obtenerVertice(i).obtenerNomVertice()<<" es: ";
-		int en = i;
+		en = i;
 		for (; prev[en] > 0; en = prev[en]){
-			cout<<"Insertando elementos"<<endl;
 			camino.insertar(en);
+			
 		}
 		camino.insertar(vertIni);
 		if(prev[en] == -2){
 			cout << "Numero infinito de caminos"<<endl;
 		}
 		else{
-			for(int j, n=camino.obtenerCantidadElementos(); j < n;j++){
+			
+			for(int j = 0, n=camino.obtenerCantidadElementos(); j < n-1;j++){
 				cout << grafo.obtenerVertice(camino.sacar()).obtenerNomVertice() << " -> ";
 			}
-			cout << grafo.obtenerVertice(camino.sacar()).obtenerNomVertice() << endl;
+			cout << grafo.obtenerVertice(camino.sacar()).obtenerNomVertice()<<". Con un coste de: "<<dist[i]<<endl;
 		}
 	}
 }
@@ -282,5 +265,5 @@ int main(){
 	grafo.nuevoArco("D","F",3);
 	grafo.nuevoArco("C","F",8);
 	grafo.nuevoArco("F","G",4);
-	bellmanFord(grafo,"S");
+	bellmanFord(grafo,"F");
 }
