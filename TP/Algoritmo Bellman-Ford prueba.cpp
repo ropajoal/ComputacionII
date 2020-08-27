@@ -2,8 +2,9 @@
 #define INFINITO 0x3f3f3f3f
 using namespace std;
 
+//Tipo de dato Vertice en el que asocia su nombre de vertice con su número de vertice
 class Vertice{
-	protected:
+	private:
 		string nombre;
 		int numVertice;
 	public:
@@ -19,19 +20,11 @@ class Vertice{
 		string obtenerNomVertice(){
 			return nombre;
 		}
-		int obtenerNumVertice(){
-			return numVertice;
-		}
-		void establecerNomVertice(string nom){
-			nombre = nom;
-		}
-		void establecerNumVertice(int num){
-			numVertice = num;
-		}
 };
 
+//Tipo de dato GrafoMatriz en el que internamente almacena un listado de vertices el que se relacionan mediante su matriz adyacente
 class GrafoMatriz{
-	protected:
+	private:
 		int maxVerts;
 		int numVerts;
 		Vertice * verts;
@@ -41,6 +34,9 @@ class GrafoMatriz{
 			maxVerts = 1;
 			GrafoMatriz(maxVerts);
 		}
+
+		//Constructor de GrafoMatriz en el que recibe un número entero para crear los límites de la matriz de adyacencia 
+		//Una vez inicializada la matriz inicializa todos los valores de la matriz a un valor muy grande en este caso la constante definida como INFINITO
 		GrafoMatriz(int max){
 			maxVerts = max;
 			verts = new Vertice[max];
@@ -53,12 +49,35 @@ class GrafoMatriz{
 				}
 			}
 		}
+
+		//Crea un nuevo vertice y lo almacena en el array verts
+		void nuevoVertice(string nombre){			
+			if(numVertice(nombre) < 0){
+				Vertice v = Vertice(nombre, numVerts);
+				verts[numVerts++] = v;
+			}
+		}
+		
+		//Obtiene los nombres de los vertices para que ellos obtener sus numeros de vertice y crear un nuevo arco
+		void nuevoArco(string nomVert1, string nomVert2, int valor){
+			int v1, v2;
+			v1 = numVertice(nomVert1);
+			v2 = numVertice(nomVert2);
+			nuevoArco(v1,v2,valor);
+		}
+
+		//Registra en la matriz de adyacencia la ponderación de la relación entre dos vertices 
+		void nuevoArco(int v1, int v2, int valor){
+			if (v1 < 0 || v2 < 0 || v1 > numVerts || v2 > numVerts) throw "Vertice no existe";
+			else matAd[v1][v2] = matAd[v2][v1] = valor;
+		}
+
+		//Retorna el numero de vertices que almacena actualmente el array de Vertices verts
 		int obtenerNumeroDeVertices(){
 			return numVerts;
 		}
-		void estableceNumeroDeVertices(int n){
-			numVerts = n;
-		}
+
+		//Busca dentro del array verts el vertice con el nombre buscado y retorna su numero de vertice
 		int numVertice(string nombre){
 			int i = 0;
 			bool encontrado = false;
@@ -68,62 +87,38 @@ class GrafoMatriz{
 			}
 			return (i < numVerts) ? i : -1;
 		}
-		void nuevoVertice(string nombre){			
-			if(numVertice(nombre) < 0){
-				Vertice v = Vertice(nombre, numVerts);
-				verts[numVerts++] = v;
-			}
-		}
-		void nuevoArco(string nomVert1, string nomVert2, int valor){
-			int v1, v2;
-			v1 = numVertice(nomVert1);
-			v2 = numVertice(nomVert2);
-			nuevoArco(v1,v2,valor);
-		}
-		void nuevoArco(int v1, int v2, int valor){
-			//if (v1 < 0 || v2 < 0 || v1 > numVerts || v2 > numVerts) 
-				//throw "Vertice no existe";
-			matAd[v1][v2] = matAd[v2][v1] = valor;
-		}
-		
+
+		//Obtiene los numero de vertice a partir de sus nombres y luego llama a la funcion que retorna la ponderación entre sus vertices	
 		int obtenerValor(string nomVert1, string nomVert2){
 			int v1, v2;
 			v1 = numVertice(nomVert1);
 			v2 = numVertice(nomVert2);
 			return obtenerValor(v1,v2);
 		}
+
+		//Retorna la ponderacion de la relacion entre dos vertices
 		int obtenerValor(int v1, int v2){
-			//if (v1 < 0 || v2 < 0 || v1 >= numVerts || v2 >= numVerts)
-				//throw "Vertice no existe";
-			return matAd[v1][v2];
+			if (v1 < 0 || v2 < 0 || v1 >= numVerts || v2 >= numVerts) throw "Vertice no existe";
+			else return matAd[v1][v2];
 		}
-		void establecerValor(string nomVert1, string nomVert2, int valor){
-			int v1, v2;
-			v1 = numVertice(nomVert1);
-			v2 = numVertice(nomVert2);
-			establecerValor(v1,v2,valor);
-		}
-		void establecerValor(int v1, int v2, int valor){
-			//if (v1 < 0 || v2 < 0 || v1 >= numVerts || v2 >= numVerts)
-				//throw "Vertice no existe";
-			//else 
-			matAd[v1][v2] = valor;
-		}
+
+		//Obtiene el numero de vertice a partir del nombre del vertice y llama a la funcion que retorna el vertice al darle el numero de vertice
 		Vertice obtenerVertice(string nomVert){
 			return obtenerVertice(numVertice(nomVert));
 		}
+
+		//Retorna el vertice a partir de su numero de vertice
 		Vertice obtenerVertice(int v){
-			//if(v < 0 || v >= numVerts) throw "Vertice no existe";
-			//else 
-			return verts[v];
+			if(v < 0 || v >= numVerts) throw "Vertice no existe";
+			else return verts[v];
 		}
 };
 
-
+//Tipo de dato Pila para construir los caminos cortos
 class Pila{
-	protected:
+	private:
 		class Nodo{
-			protected:
+			private:
 				int dato;
 				Nodo* enlace;				
 			public:
@@ -140,6 +135,7 @@ class Pila{
 		int length;
 	public:
 		Pila(){cima = NULL; length = 0;}
+		int obtenerCantidadElementos(){return length;}
 		void insertar(int dato){
 			Nodo* nuevo;
 			nuevo = new Nodo(dato);
@@ -155,22 +151,26 @@ class Pila{
 			length--;
 			return ext;
 		}
-		int tope(){return cima->obtenerDato();}
-		bool colaVacia(){
-			return cima == NULL;
-		}
-		int obtenerCantidadElementos(){return length;}
 };
 
+//Algoritmo para buscar caminos mínimos a partir de un vertice inicial, aunque no es el algoritmo mas eficaz para esta tarea este algoritmo acepta ponderaciones negativas
 void bellmanFord(GrafoMatriz grafo, int vertIni){
+
 	int numVertices = grafo.obtenerNumeroDeVertices();
 	int dist[numVertices];
 	int prev[numVertices];
+	Pila camino;
+	
+	//Inicializa todos los valores del array dist a la constante INFINITO y al array prev a -1
 	for(int i=0; i<numVertices; i++){
 		dist[i]=INFINITO;
 		prev[i]=-1;
 	}
+
+	//Inicializa la posición del vertice inicial a 0 
 	dist[vertIni] = 0;
+
+	//Para cada vertice se le aplica "relajacion" para cada una de las aristas
 	for (int k = 0; k < numVertices - 1; k++)
 		for (int i = 0; i < numVertices; i++)		
 			for (int j = 0; j < numVertices; j++)
@@ -178,7 +178,8 @@ void bellmanFord(GrafoMatriz grafo, int vertIni){
 					dist[j] = dist[i] + grafo.obtenerValor(i,j);
 					prev[j] = i;
 				}
-				
+
+	//Se aplica una segunda vez el algoritmo para detectar ciclos negativos	
 	for (int k = 0; k < numVertices - 1; k++)
 		for (int i = 0; i < numVertices; i++)
 			for (int j = 0; j < numVertices; j++)
@@ -187,21 +188,25 @@ void bellmanFord(GrafoMatriz grafo, int vertIni){
 					prev[j] = -2;
 				}
 	
-	Pila camino;
-	int en;
+	//Empieza a imprimir por pantalla los caminos
 	for (int i=0; i<numVertices; i++){
 		cout << "El camino mas corto entre el vertice "<<grafo.obtenerVertice(vertIni).obtenerNomVertice()<< " y el vertice " <<grafo.obtenerVertice(i).obtenerNomVertice()<<" es: ";
-		en = i;
-		for (; prev[en] >= 0; en = prev[en]){
+	
+		//Por cada vertice se carga todo el camino previo en la Pila camino mediante el array prev
+		int en;
+		for (en = i; prev[en] >= 0; en = prev[en]){
 			camino.insertar(en);
-			
 		}
 		camino.insertar(vertIni);
+
+		//Si hay un ciclo negativo en el vertice previo al vertice que se actual entonces imprime por pantalla Numro infinito de caminos
 		if(prev[en] == -2){
 			cout << "Numero infinito de caminos"<<endl;
 		}
 		else{
-			
+
+			//Se vacia la Pila camino a su vez que los datos extraídos de la pila se van mostrando por pantalla, creando el efecto de mostrar todo el camino hasta el vertice deseado.
+			//A la final se muestra la distancia recorrida
 			for(int j = 0, n=camino.obtenerCantidadElementos(); j < n-1;j++){
 				cout << grafo.obtenerVertice(camino.sacar()).obtenerNomVertice() << " -> ";
 			}
@@ -210,11 +215,14 @@ void bellmanFord(GrafoMatriz grafo, int vertIni){
 	}
 }
 
+//Obtiene el numero de vertice a partir del nombre del vertice para luego llamar a la función que muestra por pantalla todos los caminos minimos a todos los vertices a partir del vertice inicial
 void bellmanFord(GrafoMatriz grafo, string nomVert){
 	bellmanFord(grafo, grafo.numVertice(nomVert));
 }
 
 int main(){
+	
+	//Construcción del grafo que se desea obtener los caminos cortos
 	GrafoMatriz grafo(8);
 	grafo.nuevoVertice("A");
 	grafo.nuevoVertice("B");
@@ -238,5 +246,7 @@ int main(){
 	grafo.nuevoArco("D","F",3);
 	grafo.nuevoArco("C","F",8);
 	grafo.nuevoArco("F","G",4);
+
+	//Se llama a la funcion bellmanFord para que muestre por pantalla los caminos minimos del grafo que parte de un vertice inicial
 	bellmanFord(grafo,"S");
 }
