@@ -1,4 +1,5 @@
 #include <iostream>
+#include <conio.h>
 #include <time.h>
 #define MAX 35
 #define MIN 15
@@ -52,5 +53,9 @@ int main(){
 	//Muestra a todos los alumnos ya ordenados por sus pesos 
 	cout <<"Pesos ordenados de alumnos:"<<endl;
 	for(int i=0;i<N;i++)cout<<alumnos[i].numero<<":"<<alumnos[i].peso<<" ";
+	
+	//Pausa para ver el resultado si se ejecuta desde explorer
+	cout <<endl<< "Presione cualquier tecla para salir... ";
+	getch();
 }
 

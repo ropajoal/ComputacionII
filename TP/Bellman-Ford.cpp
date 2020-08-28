@@ -1,4 +1,5 @@
 #include <iostream>
+#include <conio.h>
 #define INFINITO 0x3f3f3f3f
 using namespace std;
 
@@ -249,4 +250,8 @@ int main(){
 
 	//Se llama a la funcion bellmanFord para que muestre por pantalla los caminos minimos del grafo que parte de un vertice inicial
 	bellmanFord(grafo,"S");
+
+	//Pausa para ver el resultado si se ejecuta desde explorer
+	cout <<endl<< "Presione cualquier tecla para salir... ";
+	getch();
 }

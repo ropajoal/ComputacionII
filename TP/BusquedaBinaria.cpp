@@ -1,5 +1,6 @@
 #include <iostream>
 #include <time.h>
+#include <conio.h>
 #define N 100
 #define LIMIT 1000
 
@@ -88,5 +89,9 @@ int main(){
 		cout <<endl<<"El numero 4.7 esta en la ubicacion: "<< globulosRojos[posicion].ubicacion;
 	else
 		cout <<endl<<"El numero 4.7 no esta dentro del arreglo";
+
+	//Pausa para ver el resultado si se ejecuta desde explorer
+	cout <<endl<< "Presione cualquier tecla para salir... ";
+	getch();
 }
 
