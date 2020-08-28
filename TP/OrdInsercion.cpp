@@ -1,5 +1,6 @@
 #include <iostream>
 #include <conio.h>
+#include <limits>
 #include <time.h>
 #define MAX 35
 #define MIN 15
@@ -34,9 +35,20 @@ void ordInsercion(Alumno array[], int n){
 int main(){
 	srand(time(NULL));
 	int N;
+	bool validacion = false;
 
-	cout <<"Ingrese numero de alumnos a procesar: ";
-	cin >> N;
+	//Validación de datos para un numero
+	do{
+		cout <<"Ingrese numero de alumnos a procesar: " << flush;
+		cin >> N;
+		if (cin.good()) validacion = true;
+		else{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(),'\n');
+			cout << "Ingreso un dato invalido. Vuelva a ingresar un numero." << endl;
+		}
+	}while (!validacion);
+
 	Alumno alumnos[N];
 
 	//Puebla el array alumnos entre un rango de maximo y un mínimo
